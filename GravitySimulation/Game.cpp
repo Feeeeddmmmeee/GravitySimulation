@@ -33,18 +33,23 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 		isRunning = true;
 	}
+
+	universe.addPlanet(new Planet(100000, Vector(200, 400), Vector(0, 1), renderer));
+	universe.addPlanet(new Planet(100000, Vector(600, 400), Vector(0, -1), renderer));
+	universe.addPlanet(new Planet(100000, Vector(400, 200), Vector(-1, 0), renderer));
+	universe.addPlanet(new Planet(100000, Vector(400, 600), Vector(1, 0), renderer));
 }
 
 void Game::update()
 {
-	
+	this->universe.update();
 }
 
 void Game::render()
 {
 	SDL_RenderClear(renderer);
 
-
+	this->universe.render(this->renderer);
 
 	SDL_RenderPresent(renderer);
 }

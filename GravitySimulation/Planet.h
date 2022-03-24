@@ -12,10 +12,10 @@ struct Planet
 	SDL_Rect srcRect, destRect;
 	SDL_Texture* texture;
 
-	Planet(double mass, Vector position, Vector velocity);
+	Planet(double mass, Vector position, Vector velocity, SDL_Renderer* renderer);
 
-	void updateVelocity(std::vector<Planet> others);
+	void updateVelocity(std::vector<Planet*> others);
 	void updatePosition();
 	
-	void draw();
+	void render(SDL_Renderer* renderer);
 };

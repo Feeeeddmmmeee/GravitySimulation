@@ -30,5 +30,5 @@ struct Vector
 
 	double Lenght();
 
-	friend std::ostream& operator<<(std::ostream stream, const Vector vec);
+	friend std::ostream& operator<<(std::ostream& stream, const Vector vec);
 };

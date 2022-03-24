@@ -113,7 +113,7 @@ double Vector::Lenght()
 	return sqrt(this->x * this->x + this->y * this->y);
 }
 
-std::ostream& operator<<(std::ostream stream, const Vector vec)
+std::ostream& operator<<(std::ostream& stream, const Vector vec)
 {
 	stream << "Vector(" << vec.x << ", " << vec.y << ")";
 	return stream;
