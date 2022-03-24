@@ -41,14 +41,14 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	universe.addPlanet(new Planet(100000, Vector(400, 600), Vector(1, 0), renderer));//*/
 
 	// Random planets
-	/*srand(time(NULL));
-	for (int i = 0; i < 1000; i++)
+	srand(time(NULL));
+	for (int i = 0; i < 25; i++)
 	{
 		universe.addPlanet(new Planet(10.0 + std::rand() % 991, Vector(std::rand() % width, std::rand() % height), Vector(0, 0), renderer));
 	}//*/
 
 	// Orbiting planets
-	universe.addPlanet(new Planet(100000, Vector(width/2, height/2), Vector(0, 0), renderer));
+	/*universe.addPlanet(new Planet(100000, Vector(width/2, height/2), Vector(0, 0), renderer));
 	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 - height/4), Vector(2, 0), renderer));
 	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 + height/4), Vector(-2, 0), renderer));//*/
 }
