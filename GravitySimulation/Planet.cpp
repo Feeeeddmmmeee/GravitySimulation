@@ -3,9 +3,12 @@
 #include "SDL_image.h"
 #include "SDL.h"
 
+#include <Windows.h>
+
 const double PI = 3.1415;
 const double DENSITY = 1;
 const double G = 0.01;
+const double MOUSE = 100000;
 
 Planet::Planet(double mass, Vector position, Vector velocity, SDL_Renderer* renderer)
 {
@@ -60,6 +63,25 @@ void Planet::updateVelocity(std::vector<Planet*>& others)
 		this->acceleration += mag * force / this->mass;
 		this->radius = std::cbrt(4 * mass / DENSITY / PI / 3);
 	}
+
+	//mouse
+	/*POINT p;
+	HWND handle;
+	handle = FindWindowA(NULL, "Gravity Simulation");
+	if (GetCursorPos(&p))
+	{
+		if (ScreenToClient(handle, &p))
+		{
+			Vector mouse = Vector(p.x, p.y);
+
+			Vector posV = mouse - this->position;
+			double distance = posV.Lenght();
+			Vector mag = posV / distance;
+
+			double force = this->mass * MOUSE * G / pow(distance, 2);
+			this->acceleration += mag * force / this->mass;
+		}
+	}//*/
 
 	this->velocity += this->acceleration;
 }

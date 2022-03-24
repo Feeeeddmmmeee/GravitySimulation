@@ -35,7 +35,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	}
 
 	// 4 Planets in a circle
-	universe.addPlanet(new Planet(100000, Vector(200, 400), Vector(0, 1), renderer));
+	/*universe.addPlanet(new Planet(100000, Vector(200, 400), Vector(0, 1), renderer));
 	universe.addPlanet(new Planet(100000, Vector(600, 400), Vector(0, -1), renderer));
 	universe.addPlanet(new Planet(100000, Vector(400, 200), Vector(-1, 0), renderer));
 	universe.addPlanet(new Planet(100000, Vector(400, 600), Vector(1, 0), renderer));//*/
@@ -48,7 +48,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	}//*/
 
 	// Orbiting planets
-	/*universe.addPlanet(new Planet(100000, Vector(width/2, height/2), Vector(0, 0), renderer));
+	universe.addPlanet(new Planet(100000, Vector(width/2, height/2), Vector(0, 0), renderer));
 	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 - height/4), Vector(2, 0), renderer));
 	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 + height/4), Vector(-2, 0), renderer));//*/
 }
@@ -79,6 +79,26 @@ void Game::handleEvents()
 	case SDL_QUIT:
 		isRunning = false;
 		break;
+
+	//adding planets
+	/*case SDL_KEYDOWN:
+		switch (event.key.keysym.sym)
+		{
+		case SDLK_a:
+			POINT p;
+			HWND handle;
+			handle = FindWindowA(NULL, "Gravity Simulation");
+			if (GetCursorPos(&p))
+			{
+				if (ScreenToClient(handle, &p))
+				{
+					Vector mPos = Vector(p.x, p.y);
+					universe.addPlanet(new Planet(1000, mPos, Vector(-2, 0), renderer));
+				}
+			}
+
+			break;
+		}//*/
 	}
 
 }
