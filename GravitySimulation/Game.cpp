@@ -34,10 +34,23 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		isRunning = true;
 	}
 
+	// 4 Planets in a circle
 	universe.addPlanet(new Planet(100000, Vector(200, 400), Vector(0, 1), renderer));
 	universe.addPlanet(new Planet(100000, Vector(600, 400), Vector(0, -1), renderer));
 	universe.addPlanet(new Planet(100000, Vector(400, 200), Vector(-1, 0), renderer));
-	universe.addPlanet(new Planet(100000, Vector(400, 600), Vector(1, 0), renderer));
+	universe.addPlanet(new Planet(100000, Vector(400, 600), Vector(1, 0), renderer));//*/
+
+	// Random planets
+	/*srand(time(NULL));
+	for (int i = 0; i < 1000; i++)
+	{
+		universe.addPlanet(new Planet(10.0 + std::rand() % 991, Vector(std::rand() % width, std::rand() % height), Vector(0, 0), renderer));
+	}//*/
+
+	// Orbiting planets
+	/*universe.addPlanet(new Planet(100000, Vector(width/2, height/2), Vector(0, 0), renderer));
+	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 - height/4), Vector(2, 0), renderer));
+	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 + height/4), Vector(-2, 0), renderer));//*/
 }
 
 void Game::update()

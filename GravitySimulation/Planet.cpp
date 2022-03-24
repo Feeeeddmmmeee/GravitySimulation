@@ -20,7 +20,7 @@ Planet::Planet(double mass, Vector position, Vector velocity, SDL_Renderer* rend
 	SDL_FreeSurface(tempSurface);
 }
 
-void Planet::updateVelocity(std::vector<Planet*> others)
+void Planet::updateVelocity(std::vector<Planet*>& others)
 {
 	this->acceleration = Vector();
 
@@ -29,11 +29,28 @@ void Planet::updateVelocity(std::vector<Planet*> others)
 		//cant collide with itself
 		if (other == this) continue;
 
-		/*collision
-		if (sqrt(pow((position.x + radius - other.position.x - other.radius), 2) + pow((position.y + radius - other.position.y - other.radius), 2)) < radius + other.radius)
+		//collision
+		if (sqrt(pow((position.x + radius - other->position.x - other->radius), 2) + pow((position.y + radius - other->position.y - other->radius), 2)) < radius + other->radius)
 		{
+			if (this->mass > other->mass)
+			{
+				this->mass += other->mass;
+				this->velocity += other->velocity * other->mass / this->mass;
+				//this->radius = std::cbrt(4 * mass / DENSITY / PI / 3);
 
-		}*/
+				others.erase(std::remove(others.begin(), others.end(), other), others.end());
+				return;
+			}
+			else
+			{
+				other->mass += this->mass;
+				other->velocity += this->velocity * this->mass / other->mass;
+				//other->radius = std::cbrt(4 * mass / DENSITY / PI / 3);
+
+				others.erase(std::remove(others.begin(), others.end(), this), others.end());
+				return;
+			}
+		}//*/
 
 		Vector posV = other->position - this->position;
 		double distance = posV.Lenght(); 
@@ -41,6 +58,7 @@ void Planet::updateVelocity(std::vector<Planet*> others)
 
 		double force = this->mass * other->mass * G / pow(distance, 2);
 		this->acceleration += mag * force / this->mass;
+		this->radius = std::cbrt(4 * mass / DENSITY / PI / 3);
 	}
 
 	this->velocity += this->acceleration;
