@@ -8,6 +8,7 @@
 *.vcxproj
 *.filters
 *.user
+*.sln
 
 
 # User-specific files
