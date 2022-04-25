@@ -67,7 +67,6 @@ void Game::update()
 		Vector mouseVec = Vector(x, y);
 
 		this->universe.move(mouseVec - this->previousMousePos);
-
 		this->previousMousePos = mouseVec;
 	}
 
