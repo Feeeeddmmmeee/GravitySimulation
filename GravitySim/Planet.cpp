@@ -57,6 +57,7 @@ void Planet::updateVelocity(std::vector<Planet*>& others)
 				//this->radius = std::cbrt(4 * mass / DENSITY / PI / 3);
 
 				Planet* p = other;
+				p->destroyTexture();
 				delete p;
 				others.erase(std::remove(others.begin(), others.end(), other), others.end());
 				return;
@@ -68,6 +69,7 @@ void Planet::updateVelocity(std::vector<Planet*>& others)
 				//other->radius = std::cbrt(4 * mass / DENSITY / PI / 3);
 
 				Planet* p = this;
+				p->destroyTexture();
 				delete p;
 				others.erase(std::remove(others.begin(), others.end(), this), others.end());
 				return;
