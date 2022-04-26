@@ -19,6 +19,8 @@ struct Planet
 	Planet(double mass, Vector position, Vector velocity, SDL_Renderer* renderer);
 	Planet(double mass, Vector position, Vector velocity, SDL_Renderer* renderer, const char* fileName);
 
+	void destroyTexture();
+
 	void updateVelocity(std::vector<Planet*>& others);
 	void updatePosition();
 

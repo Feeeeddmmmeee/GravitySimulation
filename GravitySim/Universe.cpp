@@ -28,6 +28,11 @@ void Universe::render(SDL_Renderer* renderer, float zoom)
 
 void Universe::restart()
 {
+	for (int i = 0; i < this->planets.size(); i++)
+	{
+		Planet* p = this->planets[i];
+		delete p;
+	}
 	this->planets.clear();
 }
 

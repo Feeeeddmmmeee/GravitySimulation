@@ -8,7 +8,7 @@
 class UIManager
 {
 public:
-	std::vector<UIElement*> buttons;
+	std::vector<UIElement*> buttons = {};
 
 	void update(Vector mousePos);
 	void render(SDL_Renderer* renderer);

@@ -33,6 +33,11 @@ Planet::Planet(double mass, Vector position, Vector velocity, SDL_Renderer* rend
 	SDL_FreeSurface(tempSurface);
 }
 
+void Planet::destroyTexture()
+{
+	SDL_DestroyTexture(this->texture);
+}
+
 void Planet::updateVelocity(std::vector<Planet*>& others)
 {
 	this->acceleration = Vector();
@@ -51,6 +56,8 @@ void Planet::updateVelocity(std::vector<Planet*>& others)
 				this->velocity += other->velocity * other->mass / this->mass;
 				//this->radius = std::cbrt(4 * mass / DENSITY / PI / 3);
 
+				Planet* p = other;
+				delete p;
 				others.erase(std::remove(others.begin(), others.end(), other), others.end());
 				return;
 			}
@@ -60,6 +67,8 @@ void Planet::updateVelocity(std::vector<Planet*>& others)
 				other->velocity += this->velocity * this->mass / other->mass;
 				//other->radius = std::cbrt(4 * mass / DENSITY / PI / 3);
 
+				Planet* p = this;
+				delete p;
 				others.erase(std::remove(others.begin(), others.end(), this), others.end());
 				return;
 			}

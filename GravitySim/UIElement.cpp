@@ -1,6 +1,6 @@
 #include "UIElement.h"
 
-UIElement::UIElement(Vector position, SDL_Renderer* renderer, const char* fileName, std::string identifier)
+UIElement::UIElement(Vector position, SDL_Renderer* renderer, const char* fileName, ID identifier)
 {
 	SDL_Surface* tempSurface = IMG_Load(fileName);
 	if (!tempSurface)

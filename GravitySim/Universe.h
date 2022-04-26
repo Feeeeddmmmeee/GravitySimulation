@@ -16,5 +16,5 @@ public:
 	void move(Vector deltaPos);
 
 private:
-	std::vector<Planet*> planets;
+	std::vector<Planet*> planets = {};
 };

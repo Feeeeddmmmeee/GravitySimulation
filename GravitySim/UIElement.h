@@ -6,18 +6,27 @@
 #include "Universe.h"
 #include "Vector.h"
 
+enum class ID
+{
+	EXIT,
+	RESTART,
+	PLANET,
+	EARTH,
+	MARS
+};
+
 class UIElement
 {
 public:
-	UIElement(Vector position, SDL_Renderer* renderer, const char* fileName, std::string identifier);
+	UIElement(Vector position, SDL_Renderer* renderer, const char* fileName, ID identifier);
 	bool selected() { return isSelected; }
-	std::string getID() { return identifier; }
+	ID getID() { return identifier; }
 	void update(Vector mousePos);
 	void render(SDL_Renderer* renderer);
 
 private:
 	bool isSelected;
-	std::string identifier;
+	ID identifier;
 
 	Vector position;
 	SDL_Texture* texture;

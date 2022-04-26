@@ -49,11 +49,11 @@ Game::Game(const char* title, int xpos, int ypos, int width, int height, bool fu
 	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 - height/4), Vector(7, 0), renderer));
 	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 + height/4), Vector(-7, 0), renderer));//*/
 
-	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10), this->renderer, "gui_exit.png", "exit"));
-	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 34 + 5), this->renderer, "gui_restart.png", "restart"));
-	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 2*34 + 2*5), this->renderer, "gui_planet.png", "planet"));
-	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 3*34 + 3*5), this->renderer, "gui_earth.png", "earth"));
-	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 4*34 + 4*5), this->renderer, "gui_mars.png", "mars"));
+	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10), this->renderer, "gui_exit.png", ID::EXIT));
+	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 34 + 5), this->renderer, "gui_restart.png", ID::RESTART));
+	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 2*34 + 2*5), this->renderer, "gui_planet.png", ID::PLANET));
+	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 3*34 + 3*5), this->renderer, "gui_earth.png", ID::EARTH));
+	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 4*34 + 4*5), this->renderer, "gui_mars.png", ID::MARS));
 	isPaused = false;
 	zoom = 1;
 }
@@ -134,6 +134,7 @@ void Game::handleEvents()
 			if (this->tempPlanet)
 			{
 				this->universe.addPlanet(new Planet(*tempPlanet));
+				delete tempPlanet;
 				tempPlanet = nullptr;
 				editingV = false;
 				editingM = false;
@@ -156,28 +157,29 @@ void Game::handleEvents()
 		break;
 
 	case SDL_MOUSEBUTTONUP:
-		if (event.button.button == SDL_BUTTON_MIDDLE)
-		{
+		switch(event.button.button)
+		{ 
+		case SDL_BUTTON_MIDDLE:
 			if (this->editingPos)
 			{
 				this->editingPos = false;
 				//isPaused = false;
 			}
-		}
-		else if (event.button.button == SDL_BUTTON_RIGHT)
-		{
+			break;
+		
+		case SDL_BUTTON_RIGHT:
 			if (this->tempPlanet)
 			{
 				isPaused = !isPaused;
 				this->universe.addPlanet(new Planet(*tempPlanet));
+				delete tempPlanet;
 				tempPlanet = nullptr;
 				editingV = false;
 				editingM = false;
 			}
 			break;
-		}
-		else if (event.button.button == SDL_BUTTON_LEFT)
-		{
+
+		case SDL_BUTTON_LEFT:
 			if (this->tempPlanet)
 			{
 				if (editingM)
@@ -187,21 +189,22 @@ void Game::handleEvents()
 				}
 				else if (editingV)
 				{
-					//adding velocity
+					// Adding velocity
 					int x, y;
 					SDL_GetMouseState(&x, &y);
 					tempPlanet->velocity = Vector(x, y) - tempPlanet->position;
 					tempPlanet->velocity = tempPlanet->velocity / 10;
 
-					//adding the planet
+					// Adding the planet 
 					this->universe.addPlanet(new Planet(*tempPlanet));
+					delete tempPlanet;
 					tempPlanet = nullptr;
 					isPaused = false;
 					editingV = false;
 				}
 				else
 				{
-					if (skipM)editingV = true;
+					if (skipM) editingV = true;
 					else editingM = true;
 				}
 			}
@@ -213,54 +216,63 @@ void Game::handleEvents()
 				{
 					editingV = editingM = false;
 					isPaused = skipM = true;
-					if (button->getID() == "exit")
+
+					switch (button->getID())
 					{
+					case ID::EXIT:
 						isRunning = false;
-					}
-					else if (button->getID() == "restart")
-					{
+						break;
+
+					case ID::RESTART:
 						this->universe.restart();
-					}
-					else if (button->getID() == "planet")
-					{
+						break;
+
+					case ID::PLANET:
 						int m;
 
 						//std::cin >> m;
 						m = 10000;
 
+						if (this->tempPlanet)
+						{
+							tempPlanet->destroyTexture();
+							delete tempPlanet;
+						}
+						//
 						this->tempPlanet = new Planet(m, Vector(0, 0), Vector(0, 0), renderer, "planet.png");
 						skipM = false;
-					}
-					else if (button->getID() == "earth")
-					{
-						this->tempPlanet = new Planet(EARTH_MASS, Vector(0, 0), Vector(0, 0), renderer, "earth.png");
-					}
-					else if (button->getID() == "mars")
-					{
-						this->tempPlanet = new Planet(EARTH_MASS * 0.714, Vector(0, 0), Vector(0, 0), renderer, "mars.png");
-					}
+						break;
 
+					case ID::EARTH:
+						if (this->tempPlanet)
+						{
+							tempPlanet->destroyTexture();
+							delete tempPlanet;
+						}
+						this->tempPlanet = new Planet(EARTH_MASS, Vector(0, 0), Vector(0, 0), renderer, "earth.png");
+						break;
+
+					case ID::MARS:
+						if (this->tempPlanet)
+						{
+							tempPlanet->destroyTexture();
+							delete tempPlanet;
+						}
+						this->tempPlanet = new Planet(EARTH_MASS * 0.714, Vector(0, 0), Vector(0, 0), renderer, "mars.png");
+						break;
+					}
 				}
 			}
-		}
+			break;
 
-	/*case SDL_MOUSEWHEEL:
-		if (event.wheel.y > 0 && !event.wheel.x)
-		{
-			zoom -= 0.05;
 		}
-		else if (event.wheel.y < 0 && !event.wheel.x)
-		{
-			zoom += 0.05;
-		}
-
-		break;*/
 	}
-
 }
 
 Game::~Game()
 {
+	delete tempPlanet;
+
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
