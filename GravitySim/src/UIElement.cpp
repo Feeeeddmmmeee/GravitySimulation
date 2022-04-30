@@ -19,6 +19,16 @@ UIElement::UIElement(Vector position, SDL_Renderer* renderer, const char* fileNa
 	this->destRect.w = 32;
 }
 
+UIElement::UIElement(Vector position, SDL_Renderer* renderer, SDL_Texture* texture, ID identifier)
+{
+	this->texture = texture;
+	this->identifier = identifier;
+	this->position = position;
+	this->isSelected = false;
+	this->destRect.h = 32;
+	this->destRect.w = 32;
+}
+
 void UIElement::update(Vector mousePos)
 {
 	bool collision;
@@ -54,4 +64,9 @@ void UIElement::render(SDL_Renderer* renderer)
 	this->destRect.x = this->position.x;
 	this->destRect.y = this->position.y;
 	SDL_RenderCopy(renderer, this->texture, NULL, &this->destRect);
+}
+
+void UIElement::updateTexture(SDL_Texture* texture)
+{
+	this->texture = texture;
 }

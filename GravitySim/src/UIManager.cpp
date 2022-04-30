@@ -56,3 +56,14 @@ void UIManager::textInit(TTF_Font* font, SDL_Color color)
 	this->font = font;
 	this->color = color;
 }
+
+UIElement* UIManager::getElementByID(ID identifier)
+{
+	for (auto& button : this->buttons)
+	{
+		if (button->getID() == identifier)
+		{
+			return button;
+		}
+	}
+}

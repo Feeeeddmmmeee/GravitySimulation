@@ -49,6 +49,14 @@ Game::Game(const char* title, int xpos, int ypos, int width, int height, bool fu
 	this->mars = SDL_CreateTextureFromSurface(renderer, tempSurface);
 	SDL_FreeSurface(tempSurface);
 
+	tempSurface = IMG_Load("res/gfx/gui_pause_pause.png");
+	this->pause = SDL_CreateTextureFromSurface(renderer, tempSurface);
+	SDL_FreeSurface(tempSurface);
+
+	tempSurface = IMG_Load("res/gfx/gui_pause_play.png");
+	this->play = SDL_CreateTextureFromSurface(renderer, tempSurface);
+	SDL_FreeSurface(tempSurface);
+
 	// 4 Planets in a circle
 	/*universe.addPlanet(new Planet(100000, Vector(200, 400), Vector(0, 1), renderer, this->planet));
 	universe.addPlanet(new Planet(100000, Vector(600, 400), Vector(0, -1), renderer, this->planet));
@@ -70,10 +78,11 @@ Game::Game(const char* title, int xpos, int ypos, int width, int height, bool fu
 	// Buttons
 	ui = new UIManager();
 	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10), this->renderer, "res/gfx/gui_exit.png", ID::EXIT));
-	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 34 + 5), this->renderer, "res/gfx/gui_restart.png", ID::RESTART));
-	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 2*34 + 2*5), this->renderer, "res/gfx/gui_planet.png", ID::PLANET));
-	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 3*34 + 3*5), this->renderer, "res/gfx/gui_earth.png", ID::EARTH));
-	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 4*34 + 4*5), this->renderer, "res/gfx/gui_mars.png", ID::MARS));
+	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 34 + 5), this->renderer, this->pause, ID::PAUSE));
+	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 2*34 + 2*5), this->renderer, "res/gfx/gui_restart.png", ID::RESTART));
+	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 3*34 + 3*5), this->renderer, "res/gfx/gui_planet.png", ID::PLANET));
+	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 4*34 + 4*5), this->renderer, "res/gfx/gui_earth.png", ID::EARTH));
+	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 5*34 + 5*5), this->renderer, "res/gfx/gui_mars.png", ID::MARS));
 	
 	isPaused = false;
 	zoom = 1;
@@ -95,6 +104,21 @@ void Game::update()
 	}
 
 	if(!isPaused) this->universe.update();
+
+	UIElement* e = this->ui->getElementByID(ID::PAUSE);
+	switch (this->isPaused)
+	{
+	case 0:
+		if (e->getTexture() == this->play)
+			e->updateTexture(this->pause);
+		break;
+
+	case 1:
+		if (e->getTexture() == this->pause)
+			e->updateTexture(this->play);
+		break;
+
+	}
 
 	int x, y;
 	SDL_GetMouseState(&x, &y);
@@ -119,8 +143,8 @@ void Game::render()
 	this->universe.render(this->renderer, this->zoom);
 
 	// UI
-	std::string arr[2] = { "FPS: " + std::to_string(this->currentFPS), "Planets: " + std::to_string(this->universe.size()) };
-	this->ui->render(this->renderer, arr, 2);
+	std::string arr[3] = { "FPS: " + std::to_string(this->currentFPS), "Planets: " + std::to_string(this->universe.size()), "Paused: " + std::string(this->isPaused ? "true" : "false") };
+	this->ui->render(this->renderer, arr, 3);
 
 	// Temp Planet
 	if (this->tempPlanet) this->tempPlanet->render(renderer, this->zoom);
@@ -245,7 +269,7 @@ void Game::handleEvents()
 				if (button->selected())
 				{
 					editingV = editingM = false;
-					isPaused = skipM = true;
+					skipM = true;
 
 					switch (button->getID())
 					{
@@ -253,11 +277,16 @@ void Game::handleEvents()
 						isRunning = false;
 						break;
 
+					case ID::PAUSE:
+						this->isPaused = !this->isPaused;
+						break;
+
 					case ID::RESTART:
 						this->universe.restart();
 						break;
 
 					case ID::PLANET:
+						this->isPaused = true;
 						int m;
 
 						//std::cin >> m;
@@ -273,6 +302,7 @@ void Game::handleEvents()
 						break;
 
 					case ID::EARTH:
+						this->isPaused = true;
 						if (this->tempPlanet)
 						{
 							delete tempPlanet;
@@ -281,6 +311,7 @@ void Game::handleEvents()
 						break;
 
 					case ID::MARS:
+						this->isPaused = true;
 						if (this->tempPlanet)
 						{
 							delete tempPlanet;

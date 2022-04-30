@@ -17,6 +17,8 @@ public:
 
 	void textInit(TTF_Font* font, SDL_Color color);
 
+	UIElement* getElementByID(ID identifier);
+
 	std::vector<UIElement*> buttons = {};
 
 private:

@@ -32,7 +32,7 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 
-	SDL_Texture* planet, * earth, * mars;
+	SDL_Texture* planet, *earth, *mars, *pause, *play;
 	Universe universe;
 
 	Planet* tempPlanet = nullptr;
