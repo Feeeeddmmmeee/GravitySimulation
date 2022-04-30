@@ -31,15 +31,15 @@ Game::Game(const char* title, int xpos, int ypos, int width, int height, bool fu
 		isRunning = true;
 	}
 
-	SDL_Surface* tempSurface = IMG_Load("planet.png");
+	SDL_Surface* tempSurface = IMG_Load("res/gfx/planet.png");
 	this->planet = SDL_CreateTextureFromSurface(renderer, tempSurface);
 	SDL_FreeSurface(tempSurface);
 
-	tempSurface = IMG_Load("earth.png");
+	tempSurface = IMG_Load("res/gfx/earth.png");
 	this->earth = SDL_CreateTextureFromSurface(renderer, tempSurface);
 	SDL_FreeSurface(tempSurface);
 
-	tempSurface = IMG_Load("mars.png");
+	tempSurface = IMG_Load("res/gfx/mars.png");
 	this->mars = SDL_CreateTextureFromSurface(renderer, tempSurface);
 	SDL_FreeSurface(tempSurface);
 
@@ -61,11 +61,11 @@ Game::Game(const char* title, int xpos, int ypos, int width, int height, bool fu
 	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 - height/4), Vector(7, 0), renderer, this->planet));
 	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 + height/4), Vector(-7, 0), renderer, this->planet));//*/
 
-	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10), this->renderer, "gui_exit.png", ID::EXIT));
-	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 34 + 5), this->renderer, "gui_restart.png", ID::RESTART));
-	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 2*34 + 2*5), this->renderer, "gui_planet.png", ID::PLANET));
-	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 3*34 + 3*5), this->renderer, "gui_earth.png", ID::EARTH));
-	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 4*34 + 4*5), this->renderer, "gui_mars.png", ID::MARS));
+	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10), this->renderer, "res/gfx/gui_exit.png", ID::EXIT));
+	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 34 + 5), this->renderer, "res/gfx/gui_restart.png", ID::RESTART));
+	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 2*34 + 2*5), this->renderer, "res/gfx/gui_planet.png", ID::PLANET));
+	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 3*34 + 3*5), this->renderer, "res/gfx/gui_earth.png", ID::EARTH));
+	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 4*34 + 4*5), this->renderer, "res/gfx/gui_mars.png", ID::MARS));
 	
 	isPaused = false;
 	zoom = 1;
