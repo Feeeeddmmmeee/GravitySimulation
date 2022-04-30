@@ -19,7 +19,7 @@ public:
 
 	bool running() { return isRunning; };
 
-	SDL_Texture* planet, * earth, * mars;
+	int currentFPS;
 
 private:
 	bool isRunning, isPaused;
@@ -32,9 +32,10 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 
+	SDL_Texture* planet, * earth, * mars;
 	Universe universe;
 
 	Planet* tempPlanet = nullptr;
-	UIManager ui;
+	UIManager* ui;
 
 };

@@ -28,6 +28,8 @@ int main(int argc, char* argv[])
 
 		frameTime = SDL_GetTicks() - frameStart;
 
+		game->currentFPS = min(1000.0f / frameTime, FPS);
+
 		if (frameDelay > frameTime)
 		{
 			SDL_Delay(frameDelay - frameTime);

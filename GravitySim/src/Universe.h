@@ -15,6 +15,8 @@ public:
 	void restart();
 	void move(Vector deltaPos);
 
+	size_t size() { return this->planets.size(); }
+
 private:
 	std::vector<Planet*> planets = {};
 };

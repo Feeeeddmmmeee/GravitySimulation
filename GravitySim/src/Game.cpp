@@ -2,6 +2,7 @@
 
 #include <time.h>
 #include <Windows.h>
+#include <string>
 
 Game::Game(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
@@ -29,6 +30,11 @@ Game::Game(const char* title, int xpos, int ypos, int width, int height, bool fu
 		}
 
 		isRunning = true;
+	}
+
+	if (TTF_Init() == 0)
+	{
+		std::cout << "Font Rendering Initialized!" << std::endl;
 	}
 
 	SDL_Surface* tempSurface = IMG_Load("res/gfx/planet.png");
@@ -61,14 +67,19 @@ Game::Game(const char* title, int xpos, int ypos, int width, int height, bool fu
 	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 - height/4), Vector(7, 0), renderer, this->planet));
 	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 + height/4), Vector(-7, 0), renderer, this->planet));//*/
 
-	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10), this->renderer, "res/gfx/gui_exit.png", ID::EXIT));
-	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 34 + 5), this->renderer, "res/gfx/gui_restart.png", ID::RESTART));
-	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 2*34 + 2*5), this->renderer, "res/gfx/gui_planet.png", ID::PLANET));
-	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 3*34 + 3*5), this->renderer, "res/gfx/gui_earth.png", ID::EARTH));
-	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 4*34 + 4*5), this->renderer, "res/gfx/gui_mars.png", ID::MARS));
+	// Buttons
+	ui = new UIManager();
+	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10), this->renderer, "res/gfx/gui_exit.png", ID::EXIT));
+	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 34 + 5), this->renderer, "res/gfx/gui_restart.png", ID::RESTART));
+	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 2*34 + 2*5), this->renderer, "res/gfx/gui_planet.png", ID::PLANET));
+	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 3*34 + 3*5), this->renderer, "res/gfx/gui_earth.png", ID::EARTH));
+	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 4*34 + 4*5), this->renderer, "res/gfx/gui_mars.png", ID::MARS));
 	
 	isPaused = false;
 	zoom = 1;
+
+	TTF_Font* font = TTF_OpenFont("res/font/its_me_sans_undertale.ttf", 24);
+	this->ui->textInit(font, { 255, 255, 255 });
 }
 
 void Game::update()
@@ -88,7 +99,7 @@ void Game::update()
 	int x, y;
 	SDL_GetMouseState(&x, &y);
 	Vector mousePos = Vector(x, y);
-	this->ui.update(mousePos);
+	this->ui->update(mousePos);
 	if (this->tempPlanet)
 	{
 		if (editingM)
@@ -104,12 +115,18 @@ void Game::render()
 {
 	SDL_RenderClear(renderer);
 
+	// Planets
 	this->universe.render(this->renderer, this->zoom);
-	this->ui.render(this->renderer);
+
+	// UI
+	std::string arr[2] = { "FPS: " + std::to_string(this->currentFPS), "Planets: " + std::to_string(this->universe.size()) };
+	this->ui->render(this->renderer, arr, 2);
+
+	// Temp Planet
 	if (this->tempPlanet) this->tempPlanet->render(renderer, this->zoom);
 	if (this->editingV && this->tempPlanet)
 	{
-		//render the vector
+		// Rendering the velocity vector
 		int x, y;
 		SDL_GetMouseState(&x, &y);
 		
@@ -223,7 +240,7 @@ void Game::handleEvents()
 			}
 
 			const int EARTH_MASS = 10000;
-			for (auto& button : this->ui.buttons)
+			for (auto& button : this->ui->buttons)
 			{
 				if (button->selected())
 				{
@@ -282,6 +299,7 @@ void Game::handleEvents()
 Game::~Game()
 {
 	delete tempPlanet;
+	delete ui;
 
 	SDL_DestroyTexture(this->planet);
 	SDL_DestroyTexture(this->earth);
@@ -290,4 +308,5 @@ Game::~Game()
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
+	TTF_Quit();
 }
