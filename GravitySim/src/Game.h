@@ -22,6 +22,7 @@ public:
 	int currentFPS;
 
 private:
+	int index = 0;
 	bool isRunning, isPaused;
 
 	bool editingV, editingM, skipM;

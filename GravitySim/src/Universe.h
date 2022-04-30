@@ -17,6 +17,8 @@ public:
 
 	size_t size() { return this->planets.size(); }
 
+	Vector getPlanetPosition(int& index);
+
 private:
 	std::vector<Planet*> planets = {};
 };

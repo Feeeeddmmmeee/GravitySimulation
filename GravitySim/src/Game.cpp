@@ -165,7 +165,6 @@ void Game::render()
 
 void Game::handleEvents()
 {
-
 	SDL_Event event;
 
 	SDL_PollEvent(&event);
@@ -193,6 +192,18 @@ void Game::handleEvents()
 				editingV = false;
 				editingM = false;
 			}
+			break;
+
+		case SDLK_RIGHT:
+			this->universe.move(this->universe.getPlanetPosition(this->index) * -1 + Vector(400, 400));
+			this->index++;
+
+			break;
+
+		case SDLK_LEFT:
+			this->universe.move(this->universe.getPlanetPosition(this->index) * -1 + Vector(400, 400));
+			this->index--;
+
 			break;
 
 		}

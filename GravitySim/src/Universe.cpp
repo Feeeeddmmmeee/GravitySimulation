@@ -43,3 +43,11 @@ void Universe::move(Vector deltaPos)
 		planet->position += deltaPos;
 	}
 }
+
+Vector Universe::getPlanetPosition(int& index)
+{
+	if (index < 0) index = this->planets.size() - 1;
+	if (index > this->planets.size() - 1) index = 0;
+
+	return this->planets[index]->position;
+}
