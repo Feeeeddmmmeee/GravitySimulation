@@ -31,7 +31,6 @@ void Universe::restart()
 	for (int i = 0; i < this->planets.size(); i++)
 	{
 		Planet* p = this->planets[i];
-		p->destroyTexture();
 		delete p;
 	}
 	this->planets.clear();

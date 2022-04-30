@@ -31,29 +31,42 @@ Game::Game(const char* title, int xpos, int ypos, int width, int height, bool fu
 		isRunning = true;
 	}
 
+	SDL_Surface* tempSurface = IMG_Load("planet.png");
+	this->planet = SDL_CreateTextureFromSurface(renderer, tempSurface);
+	SDL_FreeSurface(tempSurface);
+
+	tempSurface = IMG_Load("earth.png");
+	this->earth = SDL_CreateTextureFromSurface(renderer, tempSurface);
+	SDL_FreeSurface(tempSurface);
+
+	tempSurface = IMG_Load("mars.png");
+	this->mars = SDL_CreateTextureFromSurface(renderer, tempSurface);
+	SDL_FreeSurface(tempSurface);
+
 	// 4 Planets in a circle
-	/*universe.addPlanet(new Planet(100000, Vector(200, 400), Vector(0, 1), renderer));
-	universe.addPlanet(new Planet(100000, Vector(600, 400), Vector(0, -1), renderer));
-	universe.addPlanet(new Planet(100000, Vector(400, 200), Vector(-1, 0), renderer));
-	universe.addPlanet(new Planet(100000, Vector(400, 600), Vector(1, 0), renderer));//*/
+	/*universe.addPlanet(new Planet(100000, Vector(200, 400), Vector(0, 1), renderer, this->planet));
+	universe.addPlanet(new Planet(100000, Vector(600, 400), Vector(0, -1), renderer, this->planet));
+	universe.addPlanet(new Planet(100000, Vector(400, 200), Vector(-1, 0), renderer, this->planet));
+	universe.addPlanet(new Planet(100000, Vector(400, 600), Vector(1, 0), renderer, this->planet));//*/
 
 	// Random planets
 	srand(time(NULL));
 	for (int i = 0; i < 100; i++)
 	{
-		universe.addPlanet(new Planet(100 + std::rand() % 901, Vector(std::rand() % width, std::rand() % height), Vector((std::rand() % 10 - 5) / 10, (std::rand() % 10 - 5) / 10), renderer));
+		universe.addPlanet(new Planet(10 + std::rand() % 91, Vector(std::rand() % width, std::rand() % height), Vector((std::rand() % 10 - 5) / 10, (std::rand() % 10 - 5) / 10), renderer, this->planet));
 	}//*/
 
 	// Orbiting planets
-	/*universe.addPlanet(new Planet(100000, Vector(width/2, height/2), Vector(0, 0), renderer));
-	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 - height/4), Vector(7, 0), renderer));
-	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 + height/4), Vector(-7, 0), renderer));//*/
+	/*universe.addPlanet(new Planet(100000, Vector(width/2, height/2), Vector(0, 0), renderer, this->planet));
+	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 - height/4), Vector(7, 0), renderer, this->planet));
+	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 + height/4), Vector(-7, 0), renderer, this->planet));//*/
 
 	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10), this->renderer, "gui_exit.png", ID::EXIT));
 	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 34 + 5), this->renderer, "gui_restart.png", ID::RESTART));
 	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 2*34 + 2*5), this->renderer, "gui_planet.png", ID::PLANET));
 	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 3*34 + 3*5), this->renderer, "gui_earth.png", ID::EARTH));
 	ui.buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 4*34 + 4*5), this->renderer, "gui_mars.png", ID::MARS));
+	
 	isPaused = false;
 	zoom = 1;
 }
@@ -235,30 +248,27 @@ void Game::handleEvents()
 
 						if (this->tempPlanet)
 						{
-							tempPlanet->destroyTexture();
 							delete tempPlanet;
 						}
 						//
-						this->tempPlanet = new Planet(m, Vector(0, 0), Vector(0, 0), renderer, "planet.png");
+						this->tempPlanet = new Planet(m, Vector(0, 0), Vector(0, 0), renderer, this->planet);
 						skipM = false;
 						break;
 
 					case ID::EARTH:
 						if (this->tempPlanet)
 						{
-							tempPlanet->destroyTexture();
 							delete tempPlanet;
 						}
-						this->tempPlanet = new Planet(EARTH_MASS, Vector(0, 0), Vector(0, 0), renderer, "earth.png");
+						this->tempPlanet = new Planet(EARTH_MASS, Vector(0, 0), Vector(0, 0), renderer, this->earth);
 						break;
 
 					case ID::MARS:
 						if (this->tempPlanet)
 						{
-							tempPlanet->destroyTexture();
 							delete tempPlanet;
 						}
-						this->tempPlanet = new Planet(EARTH_MASS * 0.714, Vector(0, 0), Vector(0, 0), renderer, "mars.png");
+						this->tempPlanet = new Planet(EARTH_MASS * 0.714, Vector(0, 0), Vector(0, 0), renderer, this->mars);
 						break;
 					}
 				}
@@ -272,6 +282,10 @@ void Game::handleEvents()
 Game::~Game()
 {
 	delete tempPlanet;
+
+	SDL_DestroyTexture(this->planet);
+	SDL_DestroyTexture(this->earth);
+	SDL_DestroyTexture(this->mars);
 
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);

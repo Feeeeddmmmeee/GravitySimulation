@@ -19,6 +19,8 @@ public:
 
 	bool running() { return isRunning; };
 
+	SDL_Texture* planet, * earth, * mars;
+
 private:
 	bool isRunning, isPaused;
 
@@ -34,4 +36,5 @@ private:
 
 	Planet* tempPlanet = nullptr;
 	UIManager ui;
+
 };

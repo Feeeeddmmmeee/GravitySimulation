@@ -17,6 +17,7 @@ struct Planet
 	SDL_Texture* texture;
 
 	Planet(double mass, Vector position, Vector velocity, SDL_Renderer* renderer);
+	Planet(double mass, Vector position, Vector velocity, SDL_Renderer* renderer, SDL_Texture* texture);
 	Planet(double mass, Vector position, Vector velocity, SDL_Renderer* renderer, const char* fileName);
 
 	void destroyTexture();
