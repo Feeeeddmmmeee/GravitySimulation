@@ -125,8 +125,8 @@ void Planet::render(SDL_Renderer* renderer, float zoom)
 {
 	this->destRect.w = this->destRect.h = this->radius * 2 / zoom;
 
-	this->destRect.x = (this->position.x - this->radius)/zoom;
-	this->destRect.y = (this->position.y - this->radius)/zoom;
+	this->destRect.x = (this->position.x - this->radius) / zoom;
+	this->destRect.y = (this->position.y - this->radius) / zoom;
 
 	SDL_RenderCopy(renderer, this->texture, 0, &destRect);
 }

@@ -71,9 +71,9 @@ Game::Game(const char* title, int xpos, int ypos, int width, int height, bool fu
 	}//*/
 
 	// Orbiting planets
-	/*universe.addPlanet(new Planet(100000, Vector(width/2, height/2), Vector(0, 0), renderer, this->planet));
-	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 - height/4), Vector(7, 0), renderer, this->planet));
-	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 + height/4), Vector(-7, 0), renderer, this->planet));//*/
+	/*universe.addPlanet(new Planet(100000, Vector(width/2, height/2), Vector(0 + 2, -0.3), renderer, this->planet));
+	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 - height/4), Vector(7 + 2, -0.3), renderer, this->planet));
+	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 + height/4), Vector(-7 + 2, -0.3), renderer, this->planet));//*/
 
 	// Buttons
 	ui = new UIManager();
