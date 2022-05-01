@@ -128,7 +128,7 @@ void Game::update()
 	{
 		if (editingM)
 		{
-			tempPlanet->radius = Vector(mousePos - tempPlanet->position).Lenght();
+			tempPlanet->radius = max(Vector(mousePos - tempPlanet->position).Lenght(), 1);
 			tempPlanet->mass = pow(tempPlanet->radius, 3) * 3 * DENSITY * PI / 4;
 		}
 		else if(!editingV) this->tempPlanet->position = mousePos;
