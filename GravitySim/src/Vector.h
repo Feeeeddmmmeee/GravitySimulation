@@ -1,4 +1,6 @@
-#pragma once
+#ifndef VECTOR_H
+#define VECTOR_H
+
 #include <iostream>
 
 struct Vector
@@ -32,3 +34,5 @@ struct Vector
 
 	friend std::ostream& operator<<(std::ostream& stream, const Vector vec);
 };
+
+#endif

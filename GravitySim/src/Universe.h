@@ -1,4 +1,5 @@
-#pragma once
+#ifndef UNIVERSE_H
+#define UNIVERSE_H
 
 #include "Planet.h"
 #include "Vector.h"
@@ -22,3 +23,5 @@ public:
 private:
 	std::vector<Planet*> planets = {};
 };
+
+#endif

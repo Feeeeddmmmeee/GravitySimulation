@@ -1,4 +1,5 @@
-#pragma once
+#ifndef UI_MANAGER_H
+#define UI_MANAGER_H
 
 #include <vector>
 
@@ -26,3 +27,5 @@ private:
 	SDL_Color color;
 
 };
+
+#endif

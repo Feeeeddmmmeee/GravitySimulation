@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PLANET_H
+#define PLANET_H
 
 #include "Vector.h"
 #include <vector>
@@ -27,3 +28,5 @@ struct Planet
 
 	void render(SDL_Renderer* renderer, float zoom);
 };
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef UI_ELEMENT_H
+#define UI_ELEMENT_H
 
 #include <SDL_image.h>
 #include <functional>
@@ -39,3 +40,5 @@ private:
 	SDL_Texture* texture;
 	SDL_Rect destRect;
 };
+
+#endif
