@@ -57,13 +57,6 @@ Game::Game(const char* title, int xpos, int ypos, int width, int height, bool fu
 	this->play = SDL_CreateTextureFromSurface(renderer, tempSurface);
 	SDL_FreeSurface(tempSurface);
 
-	// 4 Planets in a circle
-	/*universe.addPlanet(new Planet(100000, Vector(200, 400), Vector(0, 1), renderer, this->planet));
-	universe.addPlanet(new Planet(100000, Vector(600, 400), Vector(0, -1), renderer, this->planet));
-	universe.addPlanet(new Planet(100000, Vector(400, 200), Vector(-1, 0), renderer, this->planet));
-	universe.addPlanet(new Planet(100000, Vector(400, 600), Vector(1, 0), renderer, this->planet));//*/
-
-	// Random planets
 	srand(time(NULL));
 	for (int i = 0; i < 100; i++)
 	{
@@ -75,7 +68,6 @@ Game::Game(const char* title, int xpos, int ypos, int width, int height, bool fu
 	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 - height/4), Vector(7 + 2, -0.3), renderer, this->planet));
 	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 + height/4), Vector(-7 + 2, -0.3), renderer, this->planet));//*/
 
-	// Buttons
 	ui = new UIManager();
 	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10), this->renderer, "res/gfx/gui_exit.png", ID::EXIT));
 	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 34 + 5), this->renderer, this->pause, ID::PAUSE));
@@ -106,24 +98,23 @@ void Game::update()
 	if(!isPaused) this->universe.update();
 
 	UIElement* e = this->ui->getElementByID(ID::PAUSE);
-	switch (this->isPaused)
+	if (!this->isPaused)
 	{
-	case 0:
 		if (e->getTexture() == this->play)
 			e->updateTexture(this->pause);
-		break;
-
-	case 1:
+	}
+	else
+	{
 		if (e->getTexture() == this->pause)
 			e->updateTexture(this->play);
-		break;
-
 	}
 
 	int x, y;
 	SDL_GetMouseState(&x, &y);
 	Vector mousePos = Vector(x, y);
+
 	this->ui->update(mousePos);
+
 	if (this->tempPlanet)
 	{
 		if (editingM)
@@ -139,18 +130,14 @@ void Game::render()
 {
 	SDL_RenderClear(renderer);
 
-	// Planets
 	this->universe.render(this->renderer, this->zoom);
 
-	// UI
 	std::string arr[3] = { "FPS: " + std::to_string(this->currentFPS), "Planets: " + std::to_string(this->universe.size()), "Paused: " + std::string(this->isPaused ? "true" : "false") };
 	this->ui->render(this->renderer, arr, 3);
 
-	// Temp Planet
 	if (this->tempPlanet) this->tempPlanet->render(renderer, this->zoom);
 	if (this->editingV && this->tempPlanet)
 	{
-		// Rendering the velocity vector
 		int x, y;
 		SDL_GetMouseState(&x, &y);
 		
@@ -166,7 +153,6 @@ void Game::render()
 void Game::handleEvents()
 {
 	SDL_Event event;
-
 	SDL_PollEvent(&event);
 
 	switch (event.type)
@@ -213,7 +199,6 @@ void Game::handleEvents()
 		if (event.button.button == SDL_BUTTON_MIDDLE)
 		{
 			this->editingPos = true;
-			//isPaused = true;
 
 			int x, y;
 			SDL_GetMouseState(&x, &y);
@@ -228,7 +213,6 @@ void Game::handleEvents()
 			if (this->editingPos)
 			{
 				this->editingPos = false;
-				//isPaused = false;
 			}
 			break;
 		
@@ -254,13 +238,11 @@ void Game::handleEvents()
 				}
 				else if (editingV)
 				{
-					// Adding velocity
 					int x, y;
 					SDL_GetMouseState(&x, &y);
 					tempPlanet->velocity = Vector(x, y) - tempPlanet->position;
 					tempPlanet->velocity = tempPlanet->velocity / 10;
 
-					// Adding the planet 
 					this->universe.addPlanet(new Planet(*tempPlanet));
 					delete tempPlanet;
 					tempPlanet = nullptr;
@@ -300,14 +282,13 @@ void Game::handleEvents()
 						this->isPaused = true;
 						int m;
 
-						//std::cin >> m;
 						m = 10000;
 
 						if (this->tempPlanet)
 						{
 							delete tempPlanet;
 						}
-						//
+						
 						this->tempPlanet = new Planet(m, Vector(0, 0), Vector(0, 0), renderer, this->planet);
 						skipM = false;
 						break;

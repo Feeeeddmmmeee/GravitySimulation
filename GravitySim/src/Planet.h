@@ -7,7 +7,7 @@
 
 constexpr auto PI = 3.1415;
 constexpr auto DENSITY = 1;
-constexpr auto G = 0.1; //6.67408e-11;
+constexpr auto G = 0.1;
 
 struct Planet
 {
@@ -17,9 +17,7 @@ struct Planet
 	SDL_Rect destRect;
 	SDL_Texture* texture;
 
-	Planet(double mass, Vector position, Vector velocity, SDL_Renderer* renderer);
 	Planet(double mass, Vector position, Vector velocity, SDL_Renderer* renderer, SDL_Texture* texture);
-	Planet(double mass, Vector position, Vector velocity, SDL_Renderer* renderer, const char* fileName);
 
 	void destroyTexture();
 

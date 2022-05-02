@@ -66,4 +66,6 @@ UIElement* UIManager::getElementByID(ID identifier)
 			return button;
 		}
 	}
+
+	return nullptr;
 }
