@@ -1,9 +1,5 @@
 #include "Game.h"
 
-#include <time.h>
-#include <Windows.h>
-#include <string>
-
 Game::Game(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
 	int flags = 0;
@@ -16,20 +12,20 @@ Game::Game(const char* title, int xpos, int ypos, int width, int height, bool fu
 	{
 		std::cout << "Subsystems Initialized!" << std::endl;
 
-		window = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
-		if (window)
+		this->window = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
+		if (this->window)
 		{
 			std::cout << "Window Created!" << std::endl;
 		}
 
-		renderer = SDL_CreateRenderer(window, -1, 0);
-		if (renderer)
+		this->renderer = SDL_CreateRenderer(this->window, -1, 0);
+		if (this->renderer)
 		{
-			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+			SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255);
 			std::cout << "Renderer Created!" << std::endl;
 		}
 
-		isRunning = true;
+		this->isRunning = true;
 	}
 
 	if (TTF_Init() == 0)
@@ -60,24 +56,24 @@ Game::Game(const char* title, int xpos, int ypos, int width, int height, bool fu
 	srand(time(NULL));
 	for (int i = 0; i < 100; i++)
 	{
-		universe.addPlanet(new Planet(10 + std::rand() % 91, Vector(std::rand() % width, std::rand() % height), Vector((std::rand() % 10 - 5) / 10, (std::rand() % 10 - 5) / 10), renderer, this->planet));
+		this->universe.addPlanet(new Planet(10 + std::rand() % 91, Vector(std::rand() % width, std::rand() % height), Vector((std::rand() % 10 - 5) / 10, (std::rand() % 10 - 5) / 10), this->renderer, this->planet));
 	}//*/
 
 	// Orbiting planets
-	/*universe.addPlanet(new Planet(100000, Vector(width/2, height/2), Vector(0 + 2, -0.3), renderer, this->planet));
-	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 - height/4), Vector(7 + 2, -0.3), renderer, this->planet));
-	universe.addPlanet(new Planet(1000, Vector(width/2, height/2 + height/4), Vector(-7 + 2, -0.3), renderer, this->planet));//*/
+	/*this->universe.addPlanet(new Planet(100000, Vector(width/2, height/2), Vector(0 + 2, -0.3), this->renderer, this->planet));
+	this->universe.addPlanet(new Planet(1000, Vector(width/2, height/2 - height/4), Vector(7 + 2, -0.3), this->renderer, this->planet));
+	this->universe.addPlanet(new Planet(1000, Vector(width/2, height/2 + height/4), Vector(-7 + 2, -0.3), this->renderer, this->planet));//*/
 
-	ui = new UIManager();
-	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10), this->renderer, "res/gfx/gui_exit.png", ID::EXIT));
-	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 34 + 5), this->renderer, this->pause, ID::PAUSE));
-	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 2*34 + 2*5), this->renderer, "res/gfx/gui_restart.png", ID::RESTART));
-	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 3*34 + 3*5), this->renderer, "res/gfx/gui_planet.png", ID::PLANET));
-	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 4*34 + 4*5), this->renderer, "res/gfx/gui_earth.png", ID::EARTH));
-	ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 5*34 + 5*5), this->renderer, "res/gfx/gui_mars.png", ID::MARS));
+	this->ui = new UIManager();
+	this->ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10), this->renderer, "res/gfx/gui_exit.png", ID::EXIT));
+	this->ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 34 + 5), this->renderer, this->pause, ID::PAUSE));
+	this->ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 2*34 + 2*5), this->renderer, "res/gfx/gui_restart.png", ID::RESTART));
+	this->ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 3*34 + 3*5), this->renderer, "res/gfx/gui_planet.png", ID::PLANET));
+	this->ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 4*34 + 4*5), this->renderer, "res/gfx/gui_earth.png", ID::EARTH));
+	this->ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10 + 5*34 + 5*5), this->renderer, "res/gfx/gui_mars.png", ID::MARS));
 	
-	isPaused = false;
-	zoom = 1;
+	this->isPaused = false;
+	this->zoom = 1;
 
 	TTF_Font* font = TTF_OpenFont("res/font/its_me_sans_undertale.ttf", 24);
 	this->ui->textInit(font, { 255, 255, 255 });
@@ -85,7 +81,7 @@ Game::Game(const char* title, int xpos, int ypos, int width, int height, bool fu
 
 void Game::update()
 {
-	if (editingPos)
+	if (this->editingPos)
 	{
 		int x, y;
 		SDL_GetMouseState(&x, &y);
@@ -95,7 +91,7 @@ void Game::update()
 		this->previousMousePos = mouseVec;
 	}
 
-	if(!isPaused) this->universe.update();
+	if(!this->isPaused) this->universe.update();
 
 	UIElement* e = this->ui->getElementByID(ID::PAUSE);
 	if (!this->isPaused)
@@ -117,12 +113,13 @@ void Game::update()
 
 	if (this->tempPlanet)
 	{
-		if (editingM)
+		if (this->editingM)
 		{
-			tempPlanet->radius = max(Vector(mousePos - tempPlanet->position).Lenght(), 1);
-			tempPlanet->mass = pow(tempPlanet->radius, 3) * 3 * DENSITY * PI / 4;
+			float len = Vector(mousePos - this->tempPlanet->position).Lenght();
+			this->tempPlanet->radius = len > 1 ? len : 1;
+			this->tempPlanet->mass = pow(this->tempPlanet->radius, 3) * 3 * DENSITY * PI / 4;
 		}
-		else if(!editingV) this->tempPlanet->position = mousePos;
+		else if(!this->editingV) this->tempPlanet->position = mousePos;
 	}
 }
 
@@ -135,19 +132,19 @@ void Game::render()
 	std::string arr[3] = { "FPS: " + std::to_string(this->currentFPS), "Planets: " + std::to_string(this->universe.size()), "Paused: " + std::string(this->isPaused ? "true" : "false") };
 	this->ui->render(this->renderer, arr, 3);
 
-	if (this->tempPlanet) this->tempPlanet->render(renderer, this->zoom);
+	if (this->tempPlanet) this->tempPlanet->render(this->renderer, this->zoom);
 	if (this->editingV && this->tempPlanet)
 	{
 		int x, y;
 		SDL_GetMouseState(&x, &y);
 		
-		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-		SDL_RenderDrawLine(this->renderer, tempPlanet->position.x, tempPlanet->position.y, x, y);
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+		SDL_SetRenderDrawColor(this->renderer, 255, 0, 0, 255);
+		SDL_RenderDrawLine(this->renderer, this->tempPlanet->position.x, this->tempPlanet->position.y, x, y);
+		SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);
 		
 	}
 
-	SDL_RenderPresent(renderer);
+	SDL_RenderPresent(this->renderer);
 }
 
 void Game::handleEvents()
@@ -158,25 +155,25 @@ void Game::handleEvents()
 	switch (event.type)
 	{
 	case SDL_QUIT:
-		isRunning = false;
+		this->isRunning = false;
 		break;
 
 	case SDL_KEYDOWN:
 		switch (event.key.keysym.sym)
 		{
 		case SDLK_ESCAPE:
-			isRunning = false;
+			this->isRunning = false;
 			break;
 
 		case SDLK_SPACE:
-			isPaused = !isPaused;
+			this->isPaused = !this->isPaused;
 			if (this->tempPlanet)
 			{
-				this->universe.addPlanet(new Planet(*tempPlanet));
-				delete tempPlanet;
-				tempPlanet = nullptr;
-				editingV = false;
-				editingM = false;
+				this->universe.addPlanet(new Planet(*this->tempPlanet));
+				delete this->tempPlanet;
+				this->tempPlanet = nullptr;
+				this->editingV = false;
+				this->editingM = false;
 			}
 			break;
 
@@ -219,40 +216,40 @@ void Game::handleEvents()
 		case SDL_BUTTON_RIGHT:
 			if (this->tempPlanet)
 			{
-				isPaused = !isPaused;
-				this->universe.addPlanet(new Planet(*tempPlanet));
-				delete tempPlanet;
-				tempPlanet = nullptr;
-				editingV = false;
-				editingM = false;
+				this->isPaused = !this->isPaused;
+				this->universe.addPlanet(new Planet(*this->tempPlanet));
+				delete this->tempPlanet;
+				this->tempPlanet = nullptr;
+				this->editingV = false;
+				this->editingM = false;
 			}
 			break;
 
 		case SDL_BUTTON_LEFT:
 			if (this->tempPlanet)
 			{
-				if (editingM)
+				if (this->editingM)
 				{
-					editingV = true;
-					editingM = false;
+					this->editingV = true;
+					this->editingM = false;
 				}
-				else if (editingV)
+				else if (this->editingV)
 				{
 					int x, y;
 					SDL_GetMouseState(&x, &y);
-					tempPlanet->velocity = Vector(x, y) - tempPlanet->position;
-					tempPlanet->velocity = tempPlanet->velocity / 10;
+					this->tempPlanet->velocity = Vector(x, y) - this->tempPlanet->position;
+					this->tempPlanet->velocity = this->tempPlanet->velocity / 10;
 
-					this->universe.addPlanet(new Planet(*tempPlanet));
+					this->universe.addPlanet(new Planet(*this->tempPlanet));
 					delete tempPlanet;
-					tempPlanet = nullptr;
-					isPaused = false;
-					editingV = false;
+					this->tempPlanet = nullptr;
+					this->isPaused = false;
+					this->editingV = false;
 				}
 				else
 				{
-					if (skipM) editingV = true;
-					else editingM = true;
+					if (this->skipM) this->editingV = true;
+					else this->editingM = true;
 				}
 			}
 
@@ -261,13 +258,13 @@ void Game::handleEvents()
 			{
 				if (button->selected())
 				{
-					editingV = editingM = false;
-					skipM = true;
+					this->editingV = this->editingM = false;
+					this->skipM = true;
 
 					switch (button->getID())
 					{
 					case ID::EXIT:
-						isRunning = false;
+						this->isRunning = false;
 						break;
 
 					case ID::PAUSE:
@@ -290,7 +287,7 @@ void Game::handleEvents()
 						}
 						
 						this->tempPlanet = new Planet(m, Vector(0, 0), Vector(0, 0), renderer, this->planet);
-						skipM = false;
+						this->skipM = false;
 						break;
 
 					case ID::EARTH:
@@ -299,7 +296,7 @@ void Game::handleEvents()
 						{
 							delete tempPlanet;
 						}
-						this->tempPlanet = new Planet(EARTH_MASS, Vector(0, 0), Vector(0, 0), renderer, this->earth);
+						this->tempPlanet = new Planet(EARTH_MASS, Vector(0, 0), Vector(0, 0), this->renderer, this->earth);
 						break;
 
 					case ID::MARS:
@@ -308,7 +305,7 @@ void Game::handleEvents()
 						{
 							delete tempPlanet;
 						}
-						this->tempPlanet = new Planet(EARTH_MASS * 0.714, Vector(0, 0), Vector(0, 0), renderer, this->mars);
+						this->tempPlanet = new Planet(EARTH_MASS * 0.714, Vector(0, 0), Vector(0, 0), this->renderer, this->mars);
 						break;
 					}
 				}
@@ -321,15 +318,15 @@ void Game::handleEvents()
 
 Game::~Game()
 {
-	delete tempPlanet;
-	delete ui;
+	delete this->tempPlanet;
+	delete this->ui;
 
 	SDL_DestroyTexture(this->planet);
 	SDL_DestroyTexture(this->earth);
 	SDL_DestroyTexture(this->mars);
 
-	SDL_DestroyWindow(window);
-	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(this->window);
+	SDL_DestroyRenderer(this->renderer);
 	SDL_Quit();
 	TTF_Quit();
 }

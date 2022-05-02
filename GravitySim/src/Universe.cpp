@@ -7,12 +7,12 @@ void Universe::addPlanet(Planet* planet)
 
 void Universe::update()
 {
-	for (auto& planet : planets)
+	for (auto& planet : this->planets)
 	{
-		planet->updateVelocity(planets);
+		planet->updateVelocity(this->planets);
 	}
 
-	for (auto& planet : planets)
+	for (auto& planet : this->planets)
 	{
 		planet->updatePosition();
 	}
@@ -20,7 +20,7 @@ void Universe::update()
 
 void Universe::render(SDL_Renderer* renderer, float zoom)
 {
-	for (auto& planet : planets)
+	for (auto& planet : this->planets)
 	{
 		planet->render(renderer, zoom);
 	}

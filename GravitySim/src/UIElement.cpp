@@ -32,12 +32,12 @@ UIElement::UIElement(Vector position, SDL_Renderer* renderer, SDL_Texture* textu
 void UIElement::update(Vector mousePos)
 {
 	bool collision;
-	if (isSelected) collision = this->position.x < mousePos.x&& this->position.x + this->destRect.h > mousePos.x && this->position.y < mousePos.y&& this->destRect.h + this->position.y > mousePos.y;
+	if (this->isSelected) collision = this->position.x < mousePos.x&& this->position.x + this->destRect.h > mousePos.x && this->position.y < mousePos.y&& this->destRect.h + this->position.y > mousePos.y;
 	else collision = this->position.x + 2 < mousePos.x&& this->position.x + 2 + this->destRect.h - 4 > mousePos.x && this->position.y + 2 < mousePos.y&& this->destRect.h - 4 + this->position.y  + 2 > mousePos.y;
 
 	if (collision)
 	{
-		if (!isSelected)
+		if (!this->isSelected)
 		{
 			this->destRect.h -= 4;
 			this->destRect.w -= 4;
@@ -48,7 +48,7 @@ void UIElement::update(Vector mousePos)
 	}
 	else
 	{
-		if (isSelected)
+		if (this->isSelected)
 		{
 			this->destRect.h += 4;
 			this->destRect.w += 4;

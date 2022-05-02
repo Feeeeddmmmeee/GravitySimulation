@@ -2,8 +2,8 @@
 
 Vector::Vector()
 {
-	x = 0;
-	y = 0;
+	this->x = 0;
+	this->y = 0;
 }
 
 Vector::Vector(double x, double y)

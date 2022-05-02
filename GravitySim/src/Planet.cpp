@@ -1,10 +1,5 @@
 #include "Planet.h"
 
-#include "SDL_image.h"
-#include "SDL.h"
-
-#include <Windows.h>
-
 Planet::Planet(double mass, Vector position, Vector velocity, SDL_Renderer* renderer, SDL_Texture* texture)
 {
 	this->radius = std::cbrt(4 * mass / DENSITY / PI / 3);
@@ -29,7 +24,7 @@ void Planet::updateVelocity(std::vector<Planet*>& others)
 	{
 		if (other == this) continue;
 
-		if (sqrt(pow((position.x + radius - other->position.x - other->radius), 2) + pow((position.y + radius - other->position.y - other->radius), 2)) < radius + other->radius)
+		if (sqrt(pow((this->position.x + this->radius - other->position.x - other->radius), 2) + pow((this->position.y + this->radius - other->position.y - other->radius), 2)) < this->radius + other->radius)
 		{
 			if (this->mass > other->mass)
 			{
@@ -59,7 +54,7 @@ void Planet::updateVelocity(std::vector<Planet*>& others)
 
 		double force = this->mass * other->mass * G / pow(distance, 2);
 		this->acceleration += mag * force / this->mass;
-		this->radius = std::cbrt(4 * mass / DENSITY / PI / 3);
+		this->radius = std::cbrt(4 * this->mass / DENSITY / PI / 3);
 	}
 
 	this->velocity += this->acceleration;

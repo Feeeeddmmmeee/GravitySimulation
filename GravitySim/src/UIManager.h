@@ -6,7 +6,6 @@
 #include "SDL_ttf.h"
 
 #include "UIElement.h"
-#include "Vector.h"
 
 class UIManager
 {

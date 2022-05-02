@@ -1,6 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <string>
+
 #include "Universe.h"
 #include "UIManager.h"
 

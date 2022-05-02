@@ -2,10 +2,6 @@
 #define UNIVERSE_H
 
 #include "Planet.h"
-#include "Vector.h"
-
-#include <vector>
-#include <Windows.h>
 
 class Universe
 {

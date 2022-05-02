@@ -1,10 +1,8 @@
 #ifndef UI_ELEMENT_H
 #define UI_ELEMENT_H
 
-#include <SDL_image.h>
-#include <functional>
+#include "SDL_image.h"
 
-#include "Universe.h"
 #include "Vector.h"
 
 enum class ID

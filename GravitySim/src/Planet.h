@@ -1,9 +1,11 @@
 #ifndef PLANET_H
 #define PLANET_H
 
-#include "Vector.h"
 #include <vector>
+
 #include "SDL_image.h"
+
+#include "Vector.h"
 
 constexpr auto PI = 3.1415;
 constexpr auto DENSITY = 1;
