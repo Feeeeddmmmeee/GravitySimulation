@@ -1,7 +1,5 @@
 #include "Game.h"
 
-#include <Windows.h>
-
 Game* game = nullptr;
 
 int main(int argc, char* argv[])
@@ -27,7 +25,7 @@ int main(int argc, char* argv[])
 
 		frameTime = SDL_GetTicks() - frameStart;
 
-		game->currentFPS = min(1000.0f / frameTime, FPS);
+		game->currentFPS = ((1000.0f / frameTime) > FPS) ? FPS : (1000.0f / frameTime);
 
 		if (frameDelay > frameTime)
 		{
