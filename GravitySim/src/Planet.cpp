@@ -3,7 +3,6 @@
 Planet::Planet(double mass, Vector position, Vector velocity, SDL_Renderer* renderer, SDL_Texture* texture)
 {
 	this->radius = std::cbrt(4 * mass / DENSITY / PI / 3);
-	this->acceleration = Vector();
 	this->mass = mass;
 	this->position = position;
 	this->velocity = velocity;
@@ -16,9 +15,10 @@ void Planet::destroyTexture()
 	SDL_DestroyTexture(this->texture);
 }
 
-void Planet::updateVelocity(std::vector<Planet*>& others)
+void Planet::updateVelocity(std::vector<Planet*>* vec, std::mutex* m)
 {
-	this->acceleration = Vector();
+	auto& others = *vec;
+	Vector acceleration;
 
 	for (auto& other : others)
 	{
@@ -26,6 +26,8 @@ void Planet::updateVelocity(std::vector<Planet*>& others)
 
 		if (sqrt(pow((this->position.x + this->radius - other->position.x - other->radius), 2) + pow((this->position.y + this->radius - other->position.y - other->radius), 2)) < this->radius + other->radius)
 		{
+
+			std::lock_guard<std::mutex> lock(*m);
 			if (this->mass > other->mass)
 			{
 				this->mass += other->mass;
@@ -33,7 +35,10 @@ void Planet::updateVelocity(std::vector<Planet*>& others)
 
 				Planet* p = other;
 				delete p;
+
 				others.erase(std::remove(others.begin(), others.end(), other), others.end());
+				this->radius = std::cbrt(4 * this->mass / DENSITY / PI / 3);
+
 				return;
 			}
 			else
@@ -43,25 +48,31 @@ void Planet::updateVelocity(std::vector<Planet*>& others)
 
 				Planet* p = this;
 				delete p;
+
 				others.erase(std::remove(others.begin(), others.end(), this), others.end());
+				other->radius = std::cbrt(4 * other->mass / DENSITY / PI / 3);
+
 				return;
 			}
 		}
 
 		Vector posV = other->position - this->position;
 		double distance = posV.Lenght();
+		if (!distance) return;
 		Vector mag = posV / distance;
 
 		double force = this->mass * other->mass * G / pow(distance, 2);
-		this->acceleration += mag * force / this->mass;
-		this->radius = std::cbrt(4 * this->mass / DENSITY / PI / 3);
+
+		acceleration += mag * force / this->mass;
 	}
 
-	this->velocity += this->acceleration;
+	std::lock_guard<std::mutex> lock(*m);
+	this->velocity += acceleration;
 }
 
-void Planet::updatePosition()
+void Planet::updatePosition(std::mutex* m)
 {
+	std::lock_guard<std::mutex> lock(*m);
 	this->position += this->velocity;
 }
 

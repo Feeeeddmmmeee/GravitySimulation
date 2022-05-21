@@ -14,6 +14,11 @@ int main(int argc, char* argv[])
 
 	//ShowWindow(GetConsoleWindow(), SW_HIDE);
 
+	#if ASYNC
+	std::cout << "Async updates enabled!" << std::endl;
+
+	#endif
+
 	while (game->running())
 	{
 

@@ -16,10 +16,10 @@ struct Vector
 	Vector& Multiply(const Vector& vec);
 	Vector& Divide(const Vector& vec);
 
-	friend Vector& operator+(Vector vec1, const Vector vec2);
-	friend Vector& operator-(Vector vec1, const Vector vec2);
-	friend Vector& operator*(Vector vec1, const Vector vec2);
-	friend Vector& operator/(Vector vec1, const Vector vec2);
+	friend Vector operator+(Vector vec1, const Vector vec2);
+	friend Vector operator-(Vector vec1, const Vector vec2);
+	friend Vector operator*(Vector vec1, const Vector vec2);
+	friend Vector operator/(Vector vec1, const Vector vec2);
 
 	Vector& operator+=(const Vector vec);
 	Vector& operator-=(const Vector vec);

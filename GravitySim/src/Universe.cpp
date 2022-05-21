@@ -9,13 +9,42 @@ void Universe::update()
 {
 	for (auto& planet : this->planets)
 	{
-		planet->updateVelocity(this->planets);
+		#if ASYNC
+		this->futures.push_back(std::async(std::launch::async, [planet, this]() -> void
+			{
+				planet->updateVelocity(&this->planets, &this->mutex);
+			}
+		));
+
+		#else 
+		planet->updateVelocity(&this->planets, &this->mutex);
+
+		#endif
 	}
+	#if ASYNC
+	this->futures.clear();
+
+	#endif
 
 	for (auto& planet : this->planets)
 	{
-		planet->updatePosition();
+		#if ASYNC
+		this->futures.push_back(std::async(std::launch::async, [planet, this]() -> void
+			{
+				planet->updatePosition(&this->mutex);
+			}
+		));
+
+		#else
+		planet->updatePosition(&this->mutex);
+
+		#endif
 	}
+
+	#if ASYNC
+	this->futures.clear();
+
+	#endif
 }
 
 void Universe::render(SDL_Renderer* renderer, float zoom)
@@ -36,12 +65,28 @@ void Universe::restart()
 	this->planets.clear();
 }
 
-void Universe::move(Vector deltaPos)
+void Universe::move(Vector deltaPos, std::mutex* m)
 {
 	for (auto& planet : planets)
 	{
+		#if ASYNC
+		this->futures.push_back(std::async(std::launch::async, [planet, deltaPos, m]() -> void
+			{
+				std::lock_guard<std::mutex> lock(*m);
+				planet->position += deltaPos;
+			}
+		));
+
+		#else
 		planet->position += deltaPos;
+
+		#endif
 	}
+
+	#if ASYNC
+	this->futures.clear();
+
+	#endif
 }
 
 Vector Universe::getPlanetPosition(int& index)

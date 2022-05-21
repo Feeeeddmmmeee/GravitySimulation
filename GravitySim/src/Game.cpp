@@ -60,9 +60,9 @@ Game::Game(const char* title, int xpos, int ypos, int width, int height, bool fu
 	}//*/
 
 	// Orbiting planets
-	/*this->universe.addPlanet(new Planet(100000, Vector(width/2, height/2), Vector(0 + 2, -0.3), this->renderer, this->planet));
-	this->universe.addPlanet(new Planet(1000, Vector(width/2, height/2 - height/4), Vector(7 + 2, -0.3), this->renderer, this->planet));
-	this->universe.addPlanet(new Planet(1000, Vector(width/2, height/2 + height/4), Vector(-7 + 2, -0.3), this->renderer, this->planet));//*/
+	/*this->universe.addPlanet(new Planet(100000, Vector(width/2, height/2), Vector(0 , 0), this->renderer, this->planet));
+	this->universe.addPlanet(new Planet(1000, Vector(width/2, height/2 - height/4), Vector(7 , 0), this->renderer, this->planet));
+	this->universe.addPlanet(new Planet(1000, Vector(width/2, height/2 + height/4), Vector(-7 , 0), this->renderer, this->planet));//*/
 
 	this->ui = new UIManager();
 	this->ui->buttons.push_back(new UIElement(Vector(width - 34 - 5, 10), this->renderer, "res/gfx/gui_exit.png", ID::EXIT));
@@ -87,7 +87,7 @@ void Game::update()
 		SDL_GetMouseState(&x, &y);
 		Vector mouseVec = Vector(x, y);
 
-		this->universe.move(mouseVec - this->previousMousePos);
+		this->universe.move(mouseVec - this->previousMousePos, this->universe.getMutexPtr());
 		this->previousMousePos = mouseVec;
 	}
 
@@ -178,13 +178,21 @@ void Game::handleEvents()
 			break;
 
 		case SDLK_RIGHT:
-			this->universe.move(this->universe.getPlanetPosition(this->index) * -1 + Vector(400, 400));
+			if (index >= this->universe.size()) index = 0;
+			else if (index < 0) index = this->universe.size() - 1;
+
+			this->universe.move(this->universe.getPlanetPosition(this->index) * -1, this->universe.getMutexPtr());
+			this->universe.move(Vector(400, 400), this->universe.getMutexPtr());
 			this->index++;
 
 			break;
 
 		case SDLK_LEFT:
-			this->universe.move(this->universe.getPlanetPosition(this->index) * -1 + Vector(400, 400));
+			if (index < 0) index = this->universe.size() - 1;
+			else if (index >= this->universe.size()) index = 0;
+
+			this->universe.move(this->universe.getPlanetPosition(this->index) * -1, this->universe.getMutexPtr());
+			this->universe.move(Vector(400, 400), this->universe.getMutexPtr());
 			this->index--;
 
 			break;

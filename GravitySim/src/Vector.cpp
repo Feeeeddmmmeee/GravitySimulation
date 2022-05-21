@@ -44,22 +44,22 @@ Vector& Vector::Divide(const Vector& vec)
 	return *this;
 }
 
-Vector& operator+(Vector vec1, const Vector vec2)
+Vector operator+(Vector vec1, const Vector vec2)
 {
 	return vec1.Add(vec2);
 }
 
-Vector& operator-(Vector vec1, const Vector vec2)
+Vector operator-(Vector vec1, const Vector vec2)
 {
 	return vec1.Substract(vec2);
 }
 
-Vector& operator*(Vector vec1, const Vector vec2)
+Vector operator*(Vector vec1, const Vector vec2)
 {
 	return vec1.Multiply(vec2);
 }
 
-Vector& operator/(Vector vec1, const Vector vec2)
+Vector operator/(Vector vec1, const Vector vec2)
 {
 	return vec1.Divide(vec2);
 }
